@@ -7,23 +7,27 @@ import re
 import geopandas as gpd
 from streamlit_folium import folium_static
 
-from helpers import plot_map
+import sys
+
+
+from helpers import plotting_functions
 
 import warnings
 
 warnings.simplefilter('ignore', FutureWarning)
 
+# sys.path.append('../')
 
-IDF_sample = pd.read_csv('data_right_price/Data localisée/sample_mutations_IDF_train_localized.csv')
+IDF_sample = pd.read_csv('the-right-price/server_configuration/data_right_price/data_localisee/sample_mutations_IDF_train_localized.csv')
+# the-right-price/server_configuration/data_right_price copie/data_localisee/sample_mutations_IDF_train_localized.csv
 
 geo_IDF_sample = gpd.GeoDataFrame(
     IDF_sample, geometry=gpd.points_from_xy(IDF_sample.longitude, IDF_sample.latitude))
 
 
+
+
 st.title('The Right Price')
-
-
-st.subheader('Map of all mutations')
 
 # Parameters
 dept_slider = st.selectbox(
@@ -87,7 +91,13 @@ else:
         np.arange(min_surface, 1501, 10), 
         value=(min_surface, 1500))
 
-
+plotting_functions = plotting_functions(dept=dept_slider, 
+                                        insee=insee_slider, 
+                                        section=section_slider, 
+                                        type_of_property=property_slider, 
+                                        min_value=min_value_slider, max_value=max_value_slider,
+                                        min_surface=min_surface_slider, max_surface=max_surface_slider
+                                       )
 
 year_list = IDF_sample['year'].unique().tolist()
 year_list.sort()
@@ -96,17 +106,18 @@ year_slider = st.selectbox(
     [None] + year_list)
 
 # Map
-folium_map = plot_map(geo_IDF_sample, 
-                      dept=dept_slider, 
-                      insee=insee_slider, 
-                      section=section_slider, 
-                      type_of_property=property_slider, 
-                      year_of_mutation=year_slider, 
-                      min_value=min_value_slider, max_value=max_value_slider,
-                      min_surface=min_surface_slider, max_surface=max_surface_slider)
+folium_map = plotting_functions.plot_map(geo_IDF_sample, 
+                                         year_of_mutation=year_slider
+                                        )
 
+st.header('Map of all mutations')
 if folium_map is None:
     st.subheader('There are no mutations that meet your criterias')
 else:
     folium_static(folium_map)
 
+    
+# Graph 
+st.header('A few temporal figures')
+fig = plotting_functions.plot_yearly_figures(IDF_sample, year_min=None, year_max=None)
+st.plotly_chart(fig, use_container_width=True)
