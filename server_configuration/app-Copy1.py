@@ -119,5 +119,6 @@ else:
     
 # Graph 
 st.header('A few temporal figures')
+
 fig = plotting_functions.plot_yearly_figures(IDF_sample, year_min=None, year_max=None)
 st.plotly_chart(fig, use_container_width=True)
