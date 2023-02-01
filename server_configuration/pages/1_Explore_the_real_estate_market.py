@@ -9,14 +9,25 @@ from streamlit_folium import folium_static
 
 import sys
 
-
 from helpers import plotting_functions
 
 import warnings
 
 warnings.simplefilter('ignore', FutureWarning)
 
-st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+st.set_page_config(page_title="Home", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
+
+st.sidebar.title("Contact Us!")
+st.sidebar.info(
+    """
+    cesar.bareau@hec.edu
+    augustin.de-la-brosse@hec.edu
+    clement.giraud@hec.edu
+    juliette.demoly@hec.edu
+    ran.ding@hec.edu
+    mojun.guo@hec.edu
+    """
+)
 
 # sys.path.append('../')
 IDF_sample_100000 = pd.read_csv('server_configuration/data_right_price/data_localisee/sample_100000_mutations_IDF_train_localized.csv', index_col='Unnamed: 0')
@@ -29,11 +40,11 @@ geo_IDF_sample = gpd.GeoDataFrame(
 
 
 
-st.title('The Right Price')
+st.title('Explore the real estate market in Île-de-France')
 
 # Parameters
-my_expander = st.expander("Parameters", expanded=True)
-with my_expander:
+expander_1 = st.expander("Parameters", expanded=True)
+with expander_1:
     col1, col2, col3 = st.columns(3)
     with col1:
         dept_slider = st.selectbox(
@@ -118,14 +129,17 @@ folium_map = plotting_functions.plot_map(geo_IDF_sample
                                         )
 
 st.header('Map of all mutations')
-if folium_map is None:
-    st.subheader('There are no mutations that meet your criterias in the selected sample.')
-else:
-    folium_static(folium_map, width=1050, height=750)
+expander_2 = st.expander("Map", expanded=True)
+with expander_2:
+    if folium_map is None:
+        st.subheader('There are no mutations that meet your criterias in the selected sample.')
+    else:
+        folium_static(folium_map, width=1050, height=750)
 
     
 # Graph 
 st.header('A few temporal figures')
-
-fig = plotting_functions.plot_yearly_figures(IDF_sample_100000)
-st.plotly_chart(fig, use_container_width=True)
+expander_3 = st.expander("Graph", expanded=True)
+with expander_3:
+    fig = plotting_functions.plot_yearly_figures(IDF_sample_100000)
+    st.plotly_chart(fig, use_container_width=True)

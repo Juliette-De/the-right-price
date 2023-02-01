@@ -4,9 +4,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-st.set_page_config(layout="wide", page_title="Modelling", page_icon=":compass:")
+st.set_page_config(layout="wide", page_title="Leveraging our model", page_icon=":compass:")
 
-st.title("Modelling")
+st.title("Leverage our model")
 
 st.sidebar.title("Contact Us!")
 st.sidebar.info(
