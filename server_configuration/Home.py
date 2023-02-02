@@ -30,7 +30,7 @@ st.markdown(
     ## Want to know more about our features?
     - [Explore the real estate market](Explore_the_real_estate_market) to visualize the real estate market in Île-de-France and analyze the different market trends according to the parameters you choose.
     - [Modelling](Modelling) to predict the price of a real estate.
-    - [Leverage our model](Leveraging_our_model) to save time by seeing directly the real estate with the post potential.
+    - [Leverage our model](Leveraging_our_model) to save time by seeing directly the real estate with the most potential and be one step ahead of your competitors.
     
     
     

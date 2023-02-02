@@ -144,17 +144,17 @@ class plotting_functions:
 
 
     def plot_yearly_figures(self, df):
-"""
-    This function plots the yearly figures of property values and number of mutations based on the given dataframe and user-defined criteria. 
-    The criteria include department, municipality, section, type of property, years, value, and surface area. 
-    The function groups the data by year and plots the sum of property values and the number of mutations.
+        """
+        This function plots the yearly figures of property values and number of mutations based on the given dataframe and user-defined criteria. 
+        The criteria include department, municipality, section, type of property, years, value, and surface area. 
+        The function groups the data by year and plots the sum of property values and the number of mutations.
 
-    Parameters:
-        df (DataFrame) : The input dataframe with property data.
+        Parameters:
+            df (DataFrame) : The input dataframe with property data.
 
-    Returns:
-        None
-"""
+        Returns:
+            None
+        """
 
         if self.dept is not None and self.insee is not None:
             if np.floor(self.insee/1000) != self.dept:
