@@ -1,10 +1,14 @@
 import os
 
 import streamlit as st
+from streamlit_folium import folium_static
 import pandas as pd
 import numpy as np
 
-from helpers import modelling
+import geopandas as gpd
+import re
+
+from helpers import plotting_functions
 
 import warnings
 
@@ -47,7 +51,7 @@ with expander_1:
         insee_slider = st.selectbox(
             'Select a municipality',
             [None] + insee_list)
-    
+
     with col3:
         section_list = X_test[X_test['Dept'] == dept_slider].l_section.apply(lambda x: re.findall(r'[0-9A-Z]+', x)[0]).unique().tolist() if dept_slider is not None else X_test.l_section.apply(lambda x: re.findall(r'[0-9A-Z]+', x)[0]).unique().tolist()
         section_list.sort()
@@ -68,9 +72,9 @@ with expander_1:
     d = 10**(len(str(int(l)))-1)
     max_surface = d*np.ceil(l/d) if l > 1 else 0.0
 
-    luxury = st.checkbox('Check this box to see the most expansive properties')
+    luxury_bool = st.checkbox('Check this box to see the most expansive properties')
     
-    if luxury:
+    if luxury_bool:
         min_surface_slider, max_surface_slider = st.select_slider(
             'Select a surface', 
             np.arange(min_surface, max_surface+1, 10), 
@@ -81,16 +85,16 @@ with expander_1:
             np.arange(min_surface, 1501, 10), 
             value=(min_surface, 1500))
 
-plotting_functions = plotting_functions(dept=dept_slider, 
-                                            insee=insee_slider, 
-                                            section=section_slider, 
-                                            type_of_property=property_slider, min_surface=min_surface_slider, max_surface=max_surface_slider,
-                                            luxury=True
-                                           )
+plotting_functions_ = plotting_functions(dept=dept_slider, 
+                                         insee=insee_slider, 
+                                         section=section_slider, 
+                                         type_of_property=property_slider, 
+                                         min_surface=min_surface_slider, max_surface=max_surface_slider
+                                        )
 
 # Map
-folium_map = plotting_functions.plot_prediction_map(geo_X_test 
-                                                   )
+folium_map = plotting_functions_.plot_prediction_map(geo_X_test,
+                                         luxury=luxury_bool)
 
 st.header('Map of the best opportunities')
 if folium_map is None:
