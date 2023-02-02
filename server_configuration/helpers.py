@@ -9,8 +9,19 @@ from plotly.subplots import make_subplots
 
 import streamlit as st
 
+import os
 
-class plotting_functions():
+from sklearn.preprocessing import MinMaxScaler
+import sklearn
+from sklearn.metrics import mean_squared_error, r2_score
+from xgboost import XGBRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+import joblib
+
+
+class plotting_functions:
     
     def __init__(self, dept=None, insee=None, section=None, type_of_property=None, max_value=None, min_value=None, min_surface=None, max_surface=None, min_year=None, max_year=None):
         self.dept = dept
@@ -133,13 +144,6 @@ class plotting_functions():
 
 
     def plot_yearly_figures(self, df):
-
-        # IDF_filtered = df[ \
-        #                   (df['valeurfonc'] >= (self.min_value if self.min_value is not None else 0)) \
-        #                   & (df['valeurfonc'] <= (self.max_value if self.max_value is not None else 10**10)) \
-        #                   & (df['year'] >= (self.min_year if self.min_year is not None else 2014)) \
-        #                   & (df['year'] <= (self.max_year if self.max_year is not None else 2022)) \
-        #                  ]
         
         if self.dept is not None and self.insee is not None:
             if np.floor(self.insee/1000) != self.dept:
@@ -216,4 +220,143 @@ class plotting_functions():
         return fig
 
 
+class modelling:
+    def __init__(self, folder_path="data_localisee/"):
+        self.folder_path = folder_path
+        
+    def sort_csv_files(self):
+        files = [f for f in os.listdir(self.folder_path) if f.endswith('.csv')]
+        dfs = []
+        for file in files:
+            df = pd.read_csv(os.path.join(self.folder_path, file), low_memory=False)
+            dfs.append(df)
+        return pd.concat(dfs, ignore_index=True)
+
+    @staticmethod
+    def filter_valfonc(df):
+        mutation = df
+        mutation = mutation[~mutation["valeurfonc"].isna()]
+        mutation = mutation[mutation["valeurfonc"] >= 1000]
+        mutation = mutation[mutation["valeurfonc"] <= 1000000]
+        return mutation
+
+    @staticmethod
+    def add_arrondissement(df):
+        n_col = df["l_codinsee"].apply(lambda s: s[-4:-2] if s[2:4]=="75" else 0)
+        #n_col = n_col.rename("arro")
+        df["arro"] = n_col.astype("int")
+
+    @staticmethod
+    def sum_surface(df):
+        df["surf"] = (df["sbati"] 
+                      + df["sbatmai"] 
+                      + df["sbatapt"]
+                      + df["sbatact"])
     
+    @staticmethod
+    def min_max_scale(df):
+        scaler = StandardScaler()
+        df['valeurfonc'] = scaler.fit_transform(df['valeurfonc'].values.reshape(-1, 1))
+    
+    @staticmethod
+    def X_y_split(df):
+        features = ["anneemut", "moismut", "nblot", "sterr", "nbvolmut", "nblocmut",
+                    "nblocmai", "nblocapt", "nblocdep", "nblocact", "latitude", "longitude",
+                    "arro", "surf"
+                   ]
+        X = df[features]
+        y = df["valeurfonc"]
+        return X, y
+    
+    def preprocessing_and_splitting(self):
+        df_1 = self.sort_csv_files()
+        mutation = self.filter_valfonc(df_1)
+        self.add_arrondissement(mutation)
+        self.sum_surface(mutation)
+        self.min_max_scale(mutation)
+        X, y = self.X_y_split(mutation)
+        X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.2, random_state = 100)
+        return X_train, X_test, Y_train, Y_test
+
+    @staticmethod
+    def training(X_train, Y_train, save=False, pkl_file_path=None): 
+        from xgboost import XGBRegressor
+        xgboost = XGBRegressor()
+        xgboost.fit(X_train, Y_train)
+        if save:
+            joblib.dump(xgboost, pkl_file_path)
+        return xgboost
+
+    @staticmethod
+    def predict(xgboost, X_test):
+        y_pred = xgboost.predict(X_test)
+        return y_pred
+
+    @staticmethod
+    def load_model(pkl_file_path):
+        xgboost = joblib.load(pkl_file_path)
+        return xgboost
+    
+    
+    # R²
+    @staticmethod
+    def rsqr_score(test, pred):
+        """Calculate Root Mean Square Error score 
+
+        Args:
+            test -- test data
+            pred -- predicted data
+
+        Returns:
+            Root Mean Square Error score
+        """
+        rsqr_ = r2_score(test, pred)
+        return rsqr_
+    
+    @staticmethod
+    def rmse_score(test, pred):
+        """Calculate Root Mean Square Error score 
+
+        Args:
+            test -- test data
+            pred -- predicted data
+
+        Returns:
+            Root Mean Square Error score
+        """
+        rmse_ = np.sqrt(mean_squared_error(test, pred))
+        return rmse_
+
+    @staticmethod
+    def mse_score(test, pred):
+        """Calculate Root Mean Square Error score 
+
+        Args:
+            test -- test data
+            pred -- predicted data
+
+        Returns:
+            Root Mean Square Error score
+        """
+        mse_ = mean_squared_error(test, pred)
+        return mse_
+
+    # Print the scores
+    def print_score(self, test, pred):
+        """Print calculated score 
+
+        Args:
+            test -- test data
+            pred -- predicted data
+
+        Returns:
+            print the regressor name
+            print the R squared score
+            print Root Mean Square Error score
+            print Mean Square Error score
+        """
+
+        #print(f"- Regressor: {regr.__class__.__name__}")
+        print(f"R²: {self.rsqr_score(test, pred)}")
+        print(f"RMSE: {self.rmse_score(test, pred)}")
+        print(f"MSE: {self.mse_score(test, pred)}")

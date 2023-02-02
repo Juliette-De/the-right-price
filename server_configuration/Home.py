@@ -29,13 +29,6 @@ st.sidebar.info(
     """
 )
 
-# sys.path.append('../')
-IDF_sample_100000 = pd.read_csv('server_configuration/data_right_price/data_localisee/sample_100000_mutations_IDF_train_localized.csv', index_col='Unnamed: 0')
-IDF_sample = pd.read_csv('server_configuration/data_right_price/data_localisee/sample_mutations_IDF_train_localized.csv')
-# the-right-price/server_configuration/data_right_price copie/data_localisee/sample_mutations_IDF_train_localized.csv
-
-geo_IDF_sample = gpd.GeoDataFrame(
-    IDF_sample, geometry=gpd.points_from_xy(IDF_sample.longitude, IDF_sample.latitude))
 
 
 
