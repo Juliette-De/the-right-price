@@ -42,20 +42,20 @@ class plotting_functions:
         Plots a map showing the locations of properties based on the given parameters
 
         Args:
-        geo_df (geopandas.geodataframe.GeoDataFrame): A dataframe containing property information.
-        dept (int, optional): Department number. Defaults to None.
-        insee (int, optional): Municipality code. Defaults to None.
-        section (str, optional): Property section. Defaults to None.
-        type_of_property (str, optional): Type of property. Defaults to None.
-        year_of_mutation (int, optional): Year of mutation. Defaults to None.
-        max_value (int, optional): Maximum value of property to filter data by, default is None
-        min_value (int, optional): Minimum value of property to filter data by, default is None
-        min_surface (int, optional): Minimum surface of property to filter data by, default is None
-        max_surface (int, optional): Maximum surface of property to filter data by, default is None
+            geo_df (geopandas.geodataframe.GeoDataFrame): A dataframe containing property information.
+            dept (int, optional): Department number. Defaults to None.
+            insee (int, optional): Municipality code. Defaults to None.
+            section (str, optional): Property section. Defaults to None.
+            type_of_property (str, optional): Type of property. Defaults to None.
+            year_of_mutation (int, optional): Year of mutation. Defaults to None.
+            max_value (int, optional): Maximum value of property to filter data by, default is None
+            min_value (int, optional): Minimum value of property to filter data by, default is None
+            min_surface (int, optional): Minimum surface of property to filter data by, default is None
+            max_surface (int, optional): Maximum surface of property to filter data by, default is None
 
         Returns:
-        None: If no data meets criteria or if municipality is not in selected department
-        folium.Map: Interactive map of filtered properties with markers showing property details
+            None: If no data meets criteria or if municipality is not in selected department
+            folium.Map: Interactive map of filtered properties with markers showing property details
         """
 
 

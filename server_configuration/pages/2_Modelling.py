@@ -4,6 +4,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+from PIL import Image
+
 from helpers import modelling
 
 import warnings
@@ -88,13 +90,17 @@ columns = ['anneemut', 'moismut', 'coddep', 'vefa', 'sterr', 'nblocdep',
 df_to_predict = pd.DataFrame([[year, month, dept, vefa, 0, 0., lat_long.at[int(str(arro)[-2:]) if int(str(arro)[-2:]) <= 20 else dept, 'latitude'], lat_long.at[int(str(arro)[-2:]) if int(str(arro)[-2:]) <= 20 else dept, 'longitude'], # 48.96152015, 1.79976425,
           1., surface, int(str(arro)[-2:]), nb_rooms]], columns=columns)
 
-# st.write(lat_long.at[int(str(arro)[-2:]) if int(str(arro)[-2:]) <= 20 else dept, 'latitude'])
-# st.write(lat_long.at[int(str(arro)[-2:]) if int(str(arro)[-2:]) <= 20 else dept, 'longitude'])
-
 col5, col6, col7 = st.columns((1, 3, 1))
 with col6:
     txt = "The estimated price for this real estate is {valfonc:.2f}€"
     st.subheader(txt.format(valfonc = modelling_.min_max_rescale(modelling_.predict(reg, df_to_predict), scaler)[0][0]))
+    
+col8, col9, col10 = st.columns((1, 5, 1))
+with col9:
+    image = Image.open('./server_configuration/51b9032a-c1c9-48ad-b33a-0bf4cee7a62c.png')
+    st.image(image)
+    st.markdown("<p style='text-align: center; color: black;'>Interpretability of the model <br> eg. The surface and the location (longitude, latitude, arrondissement) have the biggest impact on the value of the real estate. <br> eg. When the latitude increases, the price increases while when the longitude increases, the price decreases.</p>", unsafe_allow_html=True)
+
 
 
 
