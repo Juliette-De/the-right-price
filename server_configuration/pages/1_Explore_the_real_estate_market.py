@@ -106,7 +106,7 @@ with expander_1:
             value=(min_surface, max_surface))
     else:
         min_surface_slider, max_surface_slider = st.select_slider(
-            'Select a surface', 
+            'Select a surface (m²)', 
             np.arange(min_surface, 1501, 10), 
             value=(min_surface, 1500))
     

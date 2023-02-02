@@ -9,8 +9,6 @@ from streamlit_folium import folium_static
 
 import sys
 
-from helpers import plotting_functions
-
 import warnings
 
 warnings.simplefilter('ignore', FutureWarning)
@@ -28,10 +26,6 @@ st.sidebar.info(
     mojun.guo@hec.edu
     """
 )
-
-
-
-
 
 st.title('The Right Price')
 
