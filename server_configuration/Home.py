@@ -1,14 +1,5 @@
 import streamlit as st
 
-import pandas as pd
-import numpy as np
-import re
-
-import geopandas as gpd
-from streamlit_folium import folium_static
-
-import sys
-
 import warnings
 
 warnings.simplefilter('ignore', FutureWarning)
