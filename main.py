@@ -1,3 +1,5 @@
+"""Main file"""
+
 import streamlit as st
 
 import warnings
