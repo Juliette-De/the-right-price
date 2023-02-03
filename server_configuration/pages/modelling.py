@@ -1,3 +1,6 @@
+"""Page 2"""
+
+
 import os
 
 import streamlit as st
