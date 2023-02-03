@@ -8,7 +8,7 @@ This application was developed for a player in the real estate industry who want
 Clone this github repository or upload all of its files to the folder where you want to place this project.
 You can install the necessary packages from the requirements.txt file provided with this repository. In the terminal, replacing path with the path of your dedicated folder:
 ```
-pip install -r /path/requirements.txt
+pip install -r path/requirements.txt
 ```
 
 Then, to launch the application:
