@@ -1,3 +1,5 @@
+"""Home page"""
+
 import streamlit as st
 
 import warnings
