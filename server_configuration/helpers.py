@@ -26,6 +26,7 @@ import joblib
 class plotting_functions:
     
     def __init__(self, dept=None, insee=None, section=None, type_of_property=None, max_value=None, min_value=None, min_surface=None, max_surface=None, min_year=None, max_year=None):
+        """Init"""
         self.dept = dept
         self.insee = insee
         self.section = section
@@ -337,7 +338,9 @@ class plotting_functions:
 
 
 class modelling:
+    """Modelling"""
     def __init__(self, folder_path="data_localisee/"):
+        """Init"""
         self.folder_path = folder_path
         
     def sort_csv_files(self):
