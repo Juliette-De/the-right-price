@@ -1,19 +1,15 @@
-streamlit==1.17.0
-streamlit_folium==0.11.0
+streamlit>=1.17.0
+streamlit_folium>=0.11.0
 
-pandas==1.5.3
-numpy==1.24.1
-PIL==1.1.6
-warnings
-re==2.2.1
-geopandas==0.12.2
-sys
+pandas>=1.5.3
+numpy>=1.24.1
+pillow
+geopandas>=0.12.2
 
-folium==0.14.0
+folium>=0.14.0
 
-plotly==5.13.0
-os
+plotly>=5.13.0
 
-sklearn==0.24.2
-xgboost==1.7.3
-joblib==1.2.0
+sklearn>=0.24.2
+xgboost>=1.7.3
+joblib>=1.2.0
