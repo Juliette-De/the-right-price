@@ -14,7 +14,7 @@ pip install -r path/requirements.txt
 
 - Launch the application:
 ```
-streamlit run path/server_configuration/Home.py
+streamlit run server_configuration/Home.py
 ```
 
 
