@@ -28,6 +28,7 @@ This application offers the following three features, each on one page:
 ## Organization of the repository
 
 The server_configuration/home.py file and the server_configuration/pages folder contain the application structure.
+
 The notebooks folder contains the various notebooks used for data collection, data augmentation, data exploration, and the model.
 
 
